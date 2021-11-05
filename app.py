@@ -20,6 +20,7 @@ class Post(db.Model):
     title = db.Column(db.String, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
+
     def __init__(self, title, price):
         self.title = title
         self.price = price
@@ -27,12 +28,12 @@ class Post(db.Model):
 class PostSchema(ma.Schema):
     class Meta:
         fields = ("id", "title", "price")
+        
 
 post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
 
-
-@app.route("/post/add", methods=["POST"])
+@app.route("/post/add", methods =["POST"])
 def add_post():
     title = request.json.get("title")
     price = request.json.get("price")
@@ -46,8 +47,7 @@ def add_post():
 @app.route("/post/get", methods=["GET"])
 def get_all_posts():
     all_posts = Post.query.all()
-    return jsonify(posts_schema.dump(all_posts))
+    return jsonify(posts_schema.dump(all_posts)) 
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

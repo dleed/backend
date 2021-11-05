@@ -15,38 +15,38 @@ ma = Marshmallow(app)
 CORS(app)
 
 
-class Item(db.Model):
+class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-    def __init__(self, name, price):
-        self.name = name
+    def __init__(self, title, price):
+        self.title = title
         self.price = price
 
-class ItemSchema(ma.Schema):
+class PostSchema(ma.Schema):
     class Meta:
-        fields = ("id", "name", "price")
+        fields = ("id", "title", "price")
 
-item_schema = ItemSchema()
-items_schema = ItemSchema(many=True)
+post_schema = PostSchema()
+posts_schema = PostSchema(many=True)
 
 
-@app.route("/item/add", methods=["POST"])
-def add_item():
-    name = request.json.get("name")
+@app.route("/post/add", methods=["POST"])
+def add_post():
+    title = request.json.get("title")
     price = request.json.get("price")
 
-    record = Item(name, price)
+    record = Post(title, price)
     db.session.add(record)
     db.session.commit()
 
-    return jsonify(item_schema.dump(record))
+    return jsonify(post_schema.dump(record))
 
-@app.route("/item/get", methods=["GET"])
-def get_all_items():
-    all_items = Item.query.all()
-    return jsonify(items_schema.dump(all_items))
+@app.route("/post/get", methods=["GET"])
+def get_all_posts():
+    all_posts = Post.query.all()
+    return jsonify(posts_schema.dump(all_posts))
 
 
 if __name__ == "__main__":
